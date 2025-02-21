@@ -12,7 +12,6 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: production
 
     defaults:
       run:
@@ -37,6 +36,6 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -chdir="./terraform" -input=false
+      run: terraform -chdir="./terraform" plan -input=false
 
     
