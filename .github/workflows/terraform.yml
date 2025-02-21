@@ -18,13 +18,15 @@ jobs:
     defaults:
       run:
         shell: bash
+    
+    environment: production
 
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: ${{ secrets.ROLE_TO_ASSUME}}
+        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: eu-west-2
     - name: Checkout
       uses: actions/checkout@v4
