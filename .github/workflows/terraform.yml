@@ -44,7 +44,7 @@ jobs:
     #   run: terraform -chdir="./terraform" fmt -check
 
     # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform -chdir="./terraform" plan -input=false
+    - name: Terraform Apply
+      run: terraform -chdir="./terraform" apply -input=false
 
     
