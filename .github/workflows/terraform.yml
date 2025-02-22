@@ -45,6 +45,6 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Apply
-      run: terraform -chdir="./terraform" apply -input=false
+      run: terraform -chdir="./terraform" apply -auto-approve -input=false
 
     
