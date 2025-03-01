@@ -14,13 +14,14 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-
+    environment: production
     defaults:
       run:
         shell: bash
         working-directory: ./terraform
-
-    environment: production
+    env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
 
     steps:
     # Checkout the repository to the GitHub Actions runner
