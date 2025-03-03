@@ -1,23 +1,39 @@
-name: Tfsec
+name: Terraform Security Scan
 
-# Only trigger, when the build workflow succeeded
 on:
-  workflow_run:
-    workflows: ["Lint"]
-    types:
-      - completed
-      
-permissions: read-all
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
-  tfsec-checks:
-      runs-on: ubuntu-latest
-      steps:
-    
-# Checkout Repository
-      - name : Check out Git Repository
-        uses: actions/checkout@v2
-      
-# Tfsec - Security scanner for your Terraform code
-      - name: Run Tfsec
-        uses: aquasecurity/tfsec-action@v1.0.0
+  security-scan:
+    name: Run Trivy tfsec scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Trivy and Scan Terraform Code
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './terraform'
+          security-checks: 'config'
+          exit-code: '1'
+          ignore-unfixed: true
+          format: 'table'
+          severity: 'HIGH,CRITICAL'
+
+      - name: Upload Scan Report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfsec-report
+          path: ./terraform/trivy-report.txt
