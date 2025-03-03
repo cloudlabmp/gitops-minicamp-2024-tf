@@ -1,4 +1,4 @@
-name: Terraform Security Scan
+name: Security Scan
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
 
       - name: Upload Scan Report
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tfsec-report
           path: ./terraform/trivy-report.txt
