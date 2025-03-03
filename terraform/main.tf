@@ -91,10 +91,19 @@ resource "aws_instance" "grafana_server" {
   vpc_security_group_ids = [aws_security_group.gitops_sg.id]
   user_data              = file("userdata.tftpl")
 
+  root_block_device {
+    encrypted = true
+  }
+
+  metadata_options {
+    http_tokens = "required"
+  }
+
   tags = {
     Name = "grafana-server"
   }
 }
+
 
 check "grafana_health_check" {
   data "http" "test" {

@@ -1,4 +1,4 @@
-name: Terraform Security Scan
+name: Trivy Security Scan
 
 on:
   push:
@@ -28,10 +28,4 @@ jobs:
         run: |
           trivy fs --scanners config --severity HIGH,CRITICAL --format table --exit-code 1 ./terraform | tee trivy-report.txt
 
-      - name: Upload Scan Report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfsec-report
-          path: trivy-report.txt
 
