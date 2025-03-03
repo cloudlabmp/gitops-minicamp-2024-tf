@@ -26,6 +26,6 @@ jobs:
 
       - name: Run Trivy Terraform Security Scan
         run: |
-          trivy fs --scanners misconfig --severity HIGH,CRITICAL --format table --exit-code 1 --trivyignores .trivyignore ./terraform | tee trivy-report.txt
+          trivy fs --scanners misconfig --severity HIGH,CRITICAL --format table --exit-code 1 --ignorefile .trivyignore ./terraform | tee trivy-report.txt
 
 
