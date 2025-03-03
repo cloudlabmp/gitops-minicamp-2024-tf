@@ -1,4 +1,4 @@
-name: Security Scan
+name: Terraform Security Scan
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -20,20 +21,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Trivy and Scan Terraform Code
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: './terraform'
-          security-checks: 'config'
-          exit-code: '1'
-          ignore-unfixed: true
-          format: 'table'
-          severity: 'HIGH,CRITICAL'
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.2
+
+      - name: Run Trivy Terraform Security Scan
+        run: |
+          trivy fs --scanners config --severity HIGH,CRITICAL --format table --exit-code 1 ./terraform | tee trivy-report.txt
 
       - name: Upload Scan Report
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: tfsec-report
-          path: ./terraform/trivy-report.txt
+          path: trivy-report.txt
+
