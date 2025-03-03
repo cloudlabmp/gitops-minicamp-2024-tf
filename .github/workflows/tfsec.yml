@@ -28,4 +28,15 @@ jobs:
         run: |
           trivy fs --scanners misconfig --severity HIGH,CRITICAL --format table --exit-code 1 --ignorefile .trivyignore ./terraform | tee trivy-report.txt
 
+      - name: Display Scan Report
+        if: always()
+        run: cat trivy-report.txt
+
+      - name: Upload Scan Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfsec-report
+          path: trivy-report.txt
+
 
