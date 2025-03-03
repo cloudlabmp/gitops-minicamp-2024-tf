@@ -7,10 +7,12 @@ on:
   pull_request:
     branches:
       - main
+      - feature
   workflow_dispatch:
 
 permissions:
   contents: read
+  pull-requests: write  # Needed for posting PR comments
 
 jobs:
   security-scan:
@@ -38,5 +40,21 @@ jobs:
         with:
           name: tfsec-report
           path: trivy-report.txt
+      
+      - name: Post Scan Results as PR Comment
+        if: always()
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            🚨 **Terraform Security Scan Results** 🚨
+
+            ```
+            $(cat trivy-report.txt)
+            ```
+
+            📌 **Severity Levels:** `HIGH`, `CRITICAL`  
+            🔍 **Ignored Findings:** Defined in `.trivyignore`  
+            📄 **Full Report:** Check [tfsec-report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
 
